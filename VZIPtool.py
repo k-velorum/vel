@@ -55,14 +55,3 @@ class LiveZIPViewer(MultiAssist):
 
     def namelist(self):
         return self.file.namelist() if self.file is not None else None
-
-# if __name__ == "__main__":
-#     z = LiveZIPViewer('http://maps.docor.jp/pine/feed.zip', 5)
-#     while True:
-#         try:
-#             f = z.open('agency.txt')
-#             for row in f:
-#                 print(row.decode('utf_8-sig'))
-#         except AttributeError as e:
-#             print(e)
-#         sleep(5)
