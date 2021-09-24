@@ -1,7 +1,7 @@
 import io
 import requests
 import zipfile
-from VLib import MultiAssist
+from VelLib import MultiAssist
 from time import time, sleep
 from multiprocessing import Value
 
