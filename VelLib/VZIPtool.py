@@ -11,7 +11,7 @@ class LiveZIPViewer(MultiAssist):
         self.url = url
         self.interval = interval
         self.file = None
-        self.timestamp = 0
+        self.timestamp = Value('d', 0)
         self.fio = None
         self._di = self.makeDict({"d":None})
         self.rePrepare = Value('i', True)
@@ -24,6 +24,7 @@ class LiveZIPViewer(MultiAssist):
         if (old != new):
             self._di["d"] = new
             self.rePrepare.value = True
+            self.timestamp.value = time()
 
     def autoRequest(self):
         self.autorun(self.urlRequest, self.interval, args=(self.url,))
@@ -36,11 +37,11 @@ class LiveZIPViewer(MultiAssist):
         self.fio.write(zipdata)
         z = zipfile.ZipFile(self.fio)
         self.file = z
-        self.timestamp = time()
+        self.timestamp.value = time()
         self.rePrepare.value = False
 
     def getLoadTime(self):
-        return self.timestamp
+        return self.timestamp.value
 
     def getData(self):
         return self.file
