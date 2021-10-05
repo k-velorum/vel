@@ -51,8 +51,7 @@ class LiveZIPViewer(MultiAssist):
             self.prepare()
         if name in self.namelist():
             return self.file.open(name)
-        print("file not found")
-        return []
+        raise FileNotFoundError(name, "file not found.")
 
     def namelist(self):
         return self.file.namelist() if self.file is not None else None
