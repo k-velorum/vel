@@ -20,7 +20,11 @@ class LiveZIPViewer(MultiAssist):
 
     def urlRequest(self, url):
         old = self._di["d"]
-        new = requests.get(url, timeout=self.interval).content
+        try:
+            new = requests.get(url, timeout=self.interval).content
+        except Exception as e:
+            print(e)
+            return
         if (old != new):
             self._di["d"] = new
             self.rePrepare.value = True
@@ -37,7 +41,6 @@ class LiveZIPViewer(MultiAssist):
         self.fio.write(zipdata)
         z = zipfile.ZipFile(self.fio)
         self.file = z
-        self.timestamp.value = time()
         self.rePrepare.value = False
 
     def getLoadTime(self):
