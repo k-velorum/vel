@@ -20,11 +20,14 @@ class LiveZIPViewer(MultiAssist):
 
     def urlRequest(self, url):
         old = self._di["d"]
-        try:
-            new = requests.get(url, timeout=self.interval).content
-        except Exception as e:
-            print(e)
-            return
+        for i in range(int(self.interval/5)):
+            try:
+                new = requests.get(url, timeout=self.interval).content
+                break
+            except Exception as e:
+                print(e)
+                sleep(5)
+                continue
         if (old != new):
             self._di["d"] = new
             self.rePrepare.value = True
