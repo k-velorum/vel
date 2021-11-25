@@ -25,7 +25,7 @@ class LiveZIPViewer(MultiAssist):
                 new = requests.get(url, timeout=self.interval).content
                 break
             except Exception as e:
-                print(e)
+                print(e, "retry:", i)
                 sleep(5)
                 continue
         if (old != new):
