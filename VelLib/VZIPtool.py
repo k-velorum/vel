@@ -32,6 +32,11 @@ class LiveZIPViewer(MultiAssist):
             self._di["d"] = new
             self.rePrepare.value = True
             self.timestamp.value = time()
+            return True
+        return False
+
+    def renewNow(self):
+        return self.urlRequest(self.url)
 
     def autoRequest(self):
         self.autorun(self.urlRequest, self.interval, args=(self.url,))
@@ -53,10 +58,12 @@ class LiveZIPViewer(MultiAssist):
         return self.file
 
     def open(self, name, mode='r', pwd=None, force_zip64=False):
+        if type(pwd) is str:
+            pwd = pwd.encode()
         if self.rePrepare.value or self.file is None:
             self.prepare()
         if name in self.namelist():
-            return self.file.open(name)
+            return self.file.open(name, mode=mode, pwd=pwd, force_zip64=force_zip64)
         raise FileNotFoundError(name, "file not found.")
 
     def namelist(self):
