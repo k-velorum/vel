@@ -55,3 +55,18 @@ class NLSystem:
             return self.nlmap[x][y]
         except KeyError:
             return {}
+
+    def nearestNodeSearch(self, lat, lon):
+        min_nodename = None
+        min_dist = math.inf
+        min_lat = None
+        min_lon = None
+        for node in self.getNodes(lat, lon):
+            nlat, nlon = self.nodes[node]
+            dist = self.calculateDistance(lat, lon, nlat, nlon)
+            if dist < min_dist:
+                min_dist = dist
+                min_nodename = node
+                min_lat = nlat
+                min_lon = nlon
+        return {"name":min_nodename, "dist":min_dist, 'lat':min_lat, 'lon':min_lon}
