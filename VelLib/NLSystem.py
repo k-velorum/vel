@@ -55,11 +55,3 @@ class NLSystem:
             return self.nlmap[x][y]
         except KeyError:
             return {}
-
-if __name__ == "__main__":
-    n = NLSystem(19)
-    n.register(34.69381538515487, 135.26862338666018, "cross")
-    print(n.nlmap)
-    print(n.nodes)
-    print(n.getNodes(34.69386730978066, 135.2690654567932))
-    print(n.getNodes(34.69534343908719, 135.2666656474996))
