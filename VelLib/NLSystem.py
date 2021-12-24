@@ -10,6 +10,7 @@ class NLSystem:
         self.amax = abs(area)+1
 
     def deg2num(self, lat, lon):
+        lat, lon = self.valueCheck(lat, lon)
         lat_rad = math.radians(lat)
         n = self.sq
         return int((lon + 180.0) / 360.0 * n), int((1.0 - math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi) / 2.0 * n)
@@ -70,3 +71,16 @@ class NLSystem:
                 min_lat = nlat
                 min_lon = nlon
         return {"name":min_nodename, "dist":min_dist, 'lat':min_lat, 'lon':min_lon}
+
+    def valueCheck(self, lat, lon):
+        if not isinstance(lat, float):
+            try:
+                lat = float(lat)
+            except Exception:
+                raise(ValueError, "lat value must be float.")
+        if not isinstance(lon, float):
+            try:
+                lon = float(lon)
+            except Exception:
+                raise(ValueError, "lon value must be float.")
+        return lat, lon
