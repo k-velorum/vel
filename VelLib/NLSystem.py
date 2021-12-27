@@ -77,10 +77,10 @@ class NLSystem:
             try:
                 lat = float(lat)
             except Exception:
-                raise(ValueError, "lat value must be float.")
+                raise(TypeError, "lat value must be float.")
         if not isinstance(lon, float):
             try:
                 lon = float(lon)
             except Exception:
-                raise(ValueError, "lon value must be float.")
+                raise(TypeError, "lon value must be float.")
         return lat, lon
