@@ -41,21 +41,23 @@ class NLSystem:
 
     def register(self, lat, lon, key):
         x, y = self.deg2num(lat, lon)
-        for i in range(self.amin, self.amax):
-            for j in range(self.amin, self.amax):
-                if x+i not in self.nlmap:
-                    self.nlmap[x+i] = {}
-                if y+j not in self.nlmap[x+i]:
-                    self.nlmap[x+i][y+j] = set()
-                self.nlmap[x+i][y+j].add(key)
+        if x not in self.nlmap:
+            self.nlmap[x] = {}
+        if y not in self.nlmap[x]:
+            self.nlmap[x][y] = set()
+        self.nlmap[x][y].add(key)
         self.nodes[key] = (lat, lon)
 
     def getNodes(self, lat, lon):
+        resultset = set()
         x, y = self.deg2num(lat, lon)
-        try:
-            return self.nlmap[x][y]
-        except KeyError:
-            return {}
+        for i in range(self.amin, self.amax):
+            for j in range(self.amin, self.amax):
+                try:
+                    resultset.update(self.nlmap[x+i][y+j])
+                except KeyError:
+                    pass
+        return resultset
 
     def nearestNodeSearch(self, lat, lon):
         min_nodename = None
