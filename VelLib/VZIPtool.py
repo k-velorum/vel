@@ -6,7 +6,6 @@ from VelLib import MultiAssist
 from time import time, sleep
 from multiprocessing import Value
 import hashlib
-import logging
 
 class LiveZIPViewer(MultiAssist):
     def __init__(self, url, interval):
