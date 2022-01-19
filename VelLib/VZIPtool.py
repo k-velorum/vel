@@ -1,9 +1,12 @@
+from cgitb import handler
 import io
 import requests
 import zipfile
 from VelLib import MultiAssist
 from time import time, sleep
 from multiprocessing import Value
+import hashlib
+import logging
 
 class LiveZIPViewer(MultiAssist):
     def __init__(self, url, interval):
@@ -19,20 +22,25 @@ class LiveZIPViewer(MultiAssist):
         self.prepare()
 
     def urlRequest(self, url):
-        old = self._di["d"]
+        old = self._di["d"] if self._di["d"] is not None else "".encode()
+        old_hash = hashlib.sha256(old).hexdigest()
         for i in range(int(self.interval/5)):
             try:
                 new = requests.get(url, timeout=self.interval).content
+                new_hash = hashlib.sha256(new).hexdigest()
                 break
             except Exception as e:
-                print(e, "retry:", i)
+                self._logger.warning("download retry({} times): {}".format(i, e))
                 sleep(5)
                 continue
-        if (old != new):
+        if (old_hash != new_hash):
             self._di["d"] = new
             self.rePrepare.value = True
             self.timestamp.value = time()
+            self._logger.info("new zip data is downloaded. md5: {} -> {}".format(old_hash, new_hash))
             return True
+        else:
+            self._logger.info("same data is downloaded. md5:{}".format(old_hash))
         return False
 
     def renewNow(self):
@@ -68,3 +76,14 @@ class LiveZIPViewer(MultiAssist):
 
     def namelist(self):
         return self.file.namelist() if self.file is not None else None
+
+if __name__ == '__main__':
+    from VelLib import maLogger
+    logger, mplogger = maLogger(logging.INFO)
+    mplogger.warning('test')
+    logger.warning('test2')
+
+    z = LiveZIPViewer("http://localhost/style.zip", 10)
+    while True:
+        sleep(5)
+        logger.info(z.namelist())

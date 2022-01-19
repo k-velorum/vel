@@ -1,6 +1,7 @@
-from multiprocessing import Process, Manager, Value
+from multiprocessing import Process, Manager, Value, get_logger
 from time import sleep
 import signal
+import logging
 
 class AdditionableDict(dict):
     def add(self, key, value):
@@ -8,11 +9,24 @@ class AdditionableDict(dict):
             self[key] = []
         self[key].append(value)
 
+def maLogger(level=logging.WARNING, handler=logging.StreamHandler(), formatter=logging.Formatter("[%(asctime)s] [%(levelname)s/%(processName)s]: %(message)s"), name=__name__):
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    import multiprocessing as mp
+    mplogger = mp.get_logger()
+    mplogger.setLevel(level)
+    mplogger.addHandler(handler)
+    return logger, mplogger
+
 class MultiAssist():
     def __init__(self):
         self.processList = []
         self.running = {}
         self.manager = None
+        self._logger = get_logger()
 
     def safeExit(self, *args):
         self.joinAllRunning()
@@ -173,6 +187,7 @@ class MultiAssist():
         continueflag = self.makeFlag(True)
         p = self.processStarter(self._run, target, interval, continueflag, args, kwargs)
         self.running[p] = continueflag
+        self._logger.info("autorun start (interval={}sec): {}".format(interval, target))
         return p
 
     def _run(self, target, interval, continueflag, args, kwargs):
