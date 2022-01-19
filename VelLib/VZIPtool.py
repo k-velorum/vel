@@ -30,9 +30,12 @@ class LiveZIPViewer(MultiAssist):
                 new_hash = hashlib.sha256(new).hexdigest()
                 break
             except Exception as e:
-                self._logger.warning("download retry({} times): {}".format(i, e))
+                self._logger.info("download retry({} times): {}".format(i+1, e))
                 sleep(5)
                 continue
+        else:
+            self._logger.warning("{} download failed from {}".format(self.__class__, url))
+            return False
         if (old_hash != new_hash):
             self._di["d"] = new
             self.rePrepare.value = True
@@ -76,14 +79,3 @@ class LiveZIPViewer(MultiAssist):
 
     def namelist(self):
         return self.file.namelist() if self.file is not None else None
-
-if __name__ == '__main__':
-    from VelLib import maLogger
-    logger, mplogger = maLogger(logging.INFO)
-    mplogger.warning('test')
-    logger.warning('test2')
-
-    z = LiveZIPViewer("http://localhost/style.zip", 10)
-    while True:
-        sleep(5)
-        logger.info(z.namelist())
