@@ -1,4 +1,5 @@
 import math
+from functools import lru_cache
 
 class NLSystem:
     def __init__(self, zlv:int = 18, area:int= 1):
@@ -40,6 +41,7 @@ class NLSystem:
         return c * r * 1000
 
     def register(self, lat, lon, key):
+        #self.nearestNodeSearch.cache_clear()
         x, y = self.deg2num(lat, lon)
         if x not in self.nlmap:
             self.nlmap[x] = {}
@@ -59,6 +61,7 @@ class NLSystem:
                     pass
         return resultset
 
+    #@lru_cache(maxsize=8192)
     def nearestNodeSearch(self, lat, lon):
         min_nodename = None
         min_dist = math.inf
