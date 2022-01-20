@@ -39,10 +39,10 @@ class LiveZIPViewer(MultiAssist):
             self._di["d"] = new
             self.rePrepare.value = True
             self.timestamp.value = time()
-            self._logger.info("new zip data is downloaded. md5: {} -> {}".format(old_hash, new_hash))
+            self._logger.info("new zip data has been downloaded. md5: {} -> {}".format(old_hash, new_hash))
             return True
         else:
-            self._logger.debug("same data is downloaded. md5:{}".format(old_hash))
+            self._logger.debug("same data has been downloaded. md5:{}".format(old_hash))
         return False
 
     def renewNow(self):
