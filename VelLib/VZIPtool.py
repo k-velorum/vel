@@ -29,20 +29,20 @@ class LiveZIPViewer(MultiAssist):
                 new_hash = hashlib.sha256(new).hexdigest()
                 break
             except Exception as e:
-                self._logger.info("download retry({} times): {}".format(i+1, e))
+                self._logger.info("download retry(%d times): %s"%(i+1, e))
                 sleep(5)
                 continue
         else:
-            self._logger.warning("{} download failed from {}".format(self.__class__, url))
+            self._logger.warning("%s download failed from %s"%(self.__class__, url))
             return False
         if (old_hash != new_hash):
             self._di["d"] = new
             self.rePrepare.value = True
             self.timestamp.value = time()
-            self._logger.info("new zip data has been downloaded from {} sha256: {} => {}".format(url,old_hash, new_hash))
+            self._logger.info("new zip data has been downloaded from %s sha256: %s => %s" % (url,old_hash, new_hash))
             return True
         else:
-            self._logger.debug("same data has been downloaded({})".format(url))
+            self._logger.debug("same data has been downloaded(%s)" % (url))
         return False
 
     def renewNow(self):

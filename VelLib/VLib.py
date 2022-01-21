@@ -183,7 +183,7 @@ class MultiAssist():
         continueflag = self.makeFlag(True)
         p = self.processStarter(self._run, target, interval, continueflag, args, kwargs)
         self.running[p] = continueflag
-        self._logger.info("autorun start (interval={}sec): {}".format(interval, target))
+        self._logger.info("autorun start (interval=%dsec): %s"%(interval, target))
         return p
 
     def _run(self, target, interval, continueflag, args, kwargs):
