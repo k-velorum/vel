@@ -9,17 +9,13 @@ class AdditionableDict(dict):
             self[key] = []
         self[key].append(value)
 
-def maLogger(level=logging.WARNING, handler=logging.StreamHandler(), formatter=logging.Formatter("[%(asctime)s.%(msecs)03d] [%(levelname)s/%(processName)s]: %(message)s", "%Y-%m-%d %H:%M:%S"), name=__name__):
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
+def maLogger(level=logging.WARNING, handler=logging.StreamHandler(), formatter=logging.Formatter("[%(asctime)s.%(msecs)03d] [%(levelname)s/%(processName)s]: %(message)s", "%Y-%m-%d %H:%M:%S"), **kwargs):
     import multiprocessing as mp
+    handler.setFormatter(formatter)
     mplogger = mp.get_logger()
     mplogger.setLevel(level)
     mplogger.addHandler(handler)
-    return logger, mplogger
+    return mplogger
 
 class MultiAssist():
     def __init__(self):
