@@ -26,9 +26,11 @@ class MultiAssist():
 
     def safeExit(self, *args):
         self.joinAllRunning()
+        return True
 
     def killExit(self, *args):
         self.killAll()
+        return True
 
     def setSignal(self, safe=True):
         if safe:
@@ -201,6 +203,15 @@ class MultiAssist():
                 sleep(1)
             sleep(interval_dec)
         return 0
+
+    def __enter__(self):
+        self._logger.debug("[%s] __enter__ is called", self.__class__.__name__)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.safeExit()
+        self._logger.debug("[%s] __exit__ is called(%s, %s, %s)"%(self.__class__.__name__, exc_type, exc_val, exc_tb))
+        return True
 
     def __getstate__(self):
         #Process, Managerはpickle化できないため破棄
