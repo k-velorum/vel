@@ -39,10 +39,10 @@ class LiveZIPViewer(MultiAssist):
             self._di["d"] = new
             self.rePrepare.value = True
             self.timestamp.value = time()
-            self._logger.info("new zip data has been downloaded from %s sha256: %s => %s" % (url,old_hash, new_hash))
+            self._logger.info("new zip data has been downloaded from %s sha256: %s => %s", url,old_hash, new_hash)
             return True
         else:
-            self._logger.debug("same data has been downloaded(%s)" % (url))
+            self._logger.debug("same data has been downloaded(%s)", url)
         return False
 
     def renewNow(self):
@@ -83,12 +83,3 @@ class LiveZIPViewer(MultiAssist):
 
     def namelist(self):
         return self.file.namelist() if self.file is not None else None
-
-
-if __name__ == "__main__":
-    from VelLib import maLogger
-    import logging
-    maLogger(level=logging.INFO)
-    z = LiveZIPViewer("https://minato.docor.jp/gtfs/feed.zip", interval=60)
-    while True:
-        sleep(10)
